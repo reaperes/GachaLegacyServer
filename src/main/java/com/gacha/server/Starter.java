@@ -1,19 +1,15 @@
 package com.gacha.server;
 
-import org.vertx.java.platform.Verticle;
+import io.vertx.core.AbstractVerticle;
 
 /**
  * @author Namhoon
  */
-public class Starter extends Verticle {
-	public static void main(String[] args) throws Exception {
-		new Starter().start();
-	}
-
+public class Starter extends AbstractVerticle {
 	@Override
-	public void start() {
-		vertx.createHttpServer().requestHandler(req ->
-			req.response().putHeader("content-type", "text/html").end("<html><body><h1>Hello from vert.x!</h1></body></html>")
-		).listen(8080);
+	public void start() throws Exception {
+		vertx.createHttpServer().requestHandler(req -> {
+			req.response().putHeader("content-type", "text/html").end("<html><body><h1>Hello from vert.x!</h1></body></html>");
+		}).listen(8080);
 	}
 }

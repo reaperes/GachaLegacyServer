@@ -1,0 +1,12 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'idea'
+
+defaultTasks = ['assemble']
+
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
+
+modGroup = 'com.gacha'
+modArtifact = 'server'
+modVersion = '0.0.1-SNAPSHOT'

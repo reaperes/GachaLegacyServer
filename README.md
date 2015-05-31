@@ -10,7 +10,7 @@ vertx run src/main/java/com/gacha/server/Starter.java -cp build/libs/com.gacha.s
 # APIs
 GET /restaurants
 {
-  [
+  data: [
     {
       "name": "blah",
       "latitude": 10.1234,

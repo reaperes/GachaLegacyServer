@@ -27,5 +27,8 @@
     <orderEntry type="library" exported="" name="Gradle: com.mchange:c3p0:0.9.5-pre10" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.mchange:mchange-commons-java:0.2.8" level="project" />
     <orderEntry type="library" exported="" name="Gradle: mysql:mysql-connector-java:5.1.35" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: io.vertx:vertx-codegen:3.0.0-milestone5" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.mvel:mvel2:2.2.0.Final" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: io.vertx:vertx-web:3.0.0-SNAPSHOT" level="project" />
   </component>
 </module>

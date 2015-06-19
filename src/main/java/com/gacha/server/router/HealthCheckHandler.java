@@ -10,7 +10,7 @@ import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 /**
  * @author Namhoon
  */
-public class HealthCheckHandler {
+public class HealthCheckHandler extends BaseHandler {
 	private static final Logger log = LoggerFactory.getLogger(HealthCheckHandler.class);
 
 	public HealthCheckHandler(Router router) {

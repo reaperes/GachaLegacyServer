@@ -10,19 +10,16 @@ import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 /**
  * @author Namhoon
  */
-public class RestaurantsHandler {
+public class RestaurantsHandler extends BaseHandler {
 	private static final double SAMPLE_LAT = 37.40208147037274d;
 	private static final double SAMPLE_LNG = 127.10891090333462d;
 
 	public RestaurantsHandler(Router router) {
 		router.get("/restaurants")
 			  .handler(routingContext -> {
-				  double latitude = Double.parseDouble(routingContext.request()
-																	 .getParam("latitude"));
-				  double longitude = Double.parseDouble(routingContext.request()
-																	  .getParam("longitude"));
-				  double radius = Double.parseDouble(routingContext.request()
-																   .getParam("radius"));
+				  double latitude = getDoubleParam(routingContext, "latitude");
+				  double longitude = getDoubleParam(routingContext, "longitude");
+				  double radius = getDoubleParam(routingContext, "radius");
 
 				  JsonObject restaurant = new JsonObject();
 				  restaurant.put("name", "blah");

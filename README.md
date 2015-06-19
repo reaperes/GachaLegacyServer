@@ -1,7 +1,7 @@
-# GachaServer
+# GachaServer (1 step run)
 ./gradlew clean build shadowJar && vertx run src/main/java/com/gacha/server/Starter.java -cp build/libs/com.gacha.server~0.0.1-SNAPSHOT-all.jar
 
-# Build
+# Build (Before run)
 ./gradlew clean build shadowJar
 
 # Run

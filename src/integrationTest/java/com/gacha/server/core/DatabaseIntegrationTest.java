@@ -1,9 +1,15 @@
 package com.gacha.server.core;
 
 import com.gacha.server.AbstractIntegrationTest;
-import org.junit.Assert;
+import io.vertx.core.json.JsonArray;
+import io.vertx.ext.sql.ResultSet;
+import io.vertx.ext.sql.SQLConnection;
+import io.vertx.ext.unit.Async;
+import io.vertx.ext.unit.TestContext;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 /**
  * @author Namhoon
@@ -17,7 +23,21 @@ public class DatabaseIntegrationTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	public void test() {
-		Assert.assertNotNull(database);
+	public void database_can_be_connected(TestContext context) {
+		Async async = context.async();
+		database.getConnection(resConnection -> {
+			if (resConnection.succeeded()) {
+				SQLConnection connection = resConnection.result();
+
+				connection.query("SELECT 1", res -> {
+					if (res.succeeded()) {
+						ResultSet rs = res.result();
+						List<JsonArray> arr = rs.getResults();
+						context.assertNotNull(arr);
+						async.complete();
+					}
+				});
+			}
+		});
 	}
 }

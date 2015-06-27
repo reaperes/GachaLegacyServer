@@ -47,12 +47,9 @@ public class DatabaseIntegrationTest extends AbstractIntegrationTest {
 	@Test
 	public void query__happy_test(TestContext context) {
 		Async async = context.async();
-		database.query("SELECT 1", resResultSet -> {
-			if (resResultSet.succeeded()) {
-				ResultSet resultSet = resResultSet.result();
-				context.assertEquals(1, resultSet.getNumRows());
+		database.query("SELECT 1", rows -> {
+				context.assertEquals(1, rows.size());
 				async.complete();
-			}
 		});
 	}
 }

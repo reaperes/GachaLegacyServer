@@ -12,6 +12,8 @@ import io.vertx.ext.sql.ResultSet;
 import io.vertx.ext.sql.SQLConnection;
 import lombok.Getter;
 
+import java.util.List;
+
 /**
  * @author Namhoon
  */
@@ -36,11 +38,17 @@ public class Database {
 		return jdbcClient.getConnection(handler);
 	}
 
-	public void query(String sql, Handler<AsyncResult<ResultSet>> handler) {
+	public void query(String sql, Handler<List<JsonObject>> handler) {
 		jdbcClient.getConnection(resSQLConnection -> {
 			if (resSQLConnection.succeeded()) {
 				SQLConnection connection = resSQLConnection.result();
-				connection.query(sql, handler);
+				connection.query(sql, res -> {
+					if (res.succeeded()) {
+						handler.handle(res.result().getRows());
+					} else {
+						throw new RuntimeException("Fail", res.cause());
+					}
+				});
 				connection.close();
 			}	else {
 				throw new RuntimeException("Failed to connect Database.", resSQLConnection.cause());

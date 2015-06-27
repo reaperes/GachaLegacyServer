@@ -10,6 +10,6 @@ public class Restaurant {
 	private long id;
 	private String name;
 	private float latitude;
-	private float langitude;
+	private float longitude;
 	private int score;
 }

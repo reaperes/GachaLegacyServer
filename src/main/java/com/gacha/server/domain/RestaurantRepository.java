@@ -16,12 +16,17 @@ public class RestaurantRepository {
 		this.database = database;
 	}
 
-	public void findAll(Handler<Collection<Restaurant>> handler) {
+	void findAll(Handler<Collection<Restaurant>> handler) {
 		database.query("SELECT * from restaurants", rows -> {
 			Collection<Restaurant> restaurants = rows.stream()
 																							 .map(Restaurant::new)
 																							 .collect(Collectors.toList());
 			handler.handle(restaurants);
 		});
+	}
+
+	void insert(Restaurant restaurant) {
+		// todo after add method update to database.java
+		//database.query("INSERT INTO restaurants(name, latitude, longitude, score) VALUES(")
 	}
 }

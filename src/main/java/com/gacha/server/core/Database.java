@@ -8,9 +8,8 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.jdbc.JDBCClient;
-import io.vertx.ext.sql.ResultSet;
 import io.vertx.ext.sql.SQLConnection;
-import lombok.Getter;
+import io.vertx.ext.sql.UpdateResult;
 
 import java.util.List;
 
@@ -40,19 +39,38 @@ public class Database {
 
 	public void query(String sql, Handler<List<JsonObject>> handler) {
 		jdbcClient.getConnection(resSQLConnection -> {
-			if (resSQLConnection.succeeded()) {
-				SQLConnection connection = resSQLConnection.result();
-				connection.query(sql, res -> {
-					if (res.succeeded()) {
-						handler.handle(res.result().getRows());
-					} else {
-						throw new RuntimeException("Fail", res.cause());
-					}
-				});
-				connection.close();
-			}	else {
+			if (resSQLConnection.failed()) {
 				throw new RuntimeException("Failed to connect Database.", resSQLConnection.cause());
 			}
+
+			SQLConnection connection = resSQLConnection.result();
+			connection.query(sql, res -> {
+				connection.close();
+				if (res.failed()) {
+					throw new RuntimeException("Failed to query - " + sql, res.cause());
+				}
+
+				handler.handle(res.result()
+													.getRows());
+			});
+		});
+	}
+
+	public void update(String sql, Handler<UpdateResult> handler) {
+		jdbcClient.getConnection(res -> {
+			if (res.failed()) {
+				throw new RuntimeException("Failed to connect Database.", res.cause());
+			}
+
+			SQLConnection sqlConnection = res.result();
+			sqlConnection.update(sql, res2 -> {
+				sqlConnection.close();
+				if (res2.failed()) {
+					throw new RuntimeException("Failed to update - " + sql, res.cause());
+				}
+
+				handler.handle(res2.result());
+			});
 		});
 	}
 }

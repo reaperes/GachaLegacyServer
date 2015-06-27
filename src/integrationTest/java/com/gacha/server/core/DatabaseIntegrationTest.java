@@ -23,8 +23,8 @@ public class DatabaseIntegrationTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	public void database_can_be_connected(TestContext context) {
-		Async async = context.async();
+	public void database_can_be_connected(TestContext ctx) {
+		Async async = ctx.async();
 		database.getConnection(resConnection -> {
 			if (resConnection.succeeded()) {
 				SQLConnection connection = resConnection.result();
@@ -33,9 +33,9 @@ public class DatabaseIntegrationTest extends AbstractIntegrationTest {
 					if (res.succeeded()) {
 						ResultSet rs = res.result();
 						List<JsonArray> arr = rs.getResults();
-						context.assertNotNull(arr);
+						ctx.assertNotNull(arr);
 					} else {
-						context.fail();
+						ctx.fail();
 					}
 					connection.close();
 					async.complete();
@@ -45,11 +45,20 @@ public class DatabaseIntegrationTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	public void query__happy_test(TestContext context) {
-		Async async = context.async();
+	public void query__happy_test(TestContext ctx) {
+		Async async = ctx.async();
 		database.query("SELECT 1", rows -> {
-				context.assertEquals(1, rows.size());
+				ctx.assertEquals(1, rows.size());
 				async.complete();
+		});
+	}
+
+	// Ignore
+	public void update__happy_test(TestContext ctx) {
+		Async async = ctx.async();
+		database.update("INSERT IGNORE INTO restaurants(id) VALUES(0)", result -> {
+			ctx.assertEquals(1, result.getUpdated());
+			async.complete();
 		});
 	}
 }

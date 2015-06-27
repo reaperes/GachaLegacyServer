@@ -5,7 +5,10 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.jdbc.JDBCClient;
+import io.vertx.ext.sql.ResultSet;
 import io.vertx.ext.sql.SQLConnection;
 import lombok.Getter;
 
@@ -13,6 +16,8 @@ import lombok.Getter;
  * @author Namhoon
  */
 public class Database {
+	private final Logger log = LoggerFactory.getLogger(Database.class);
+
 	private JDBCClient jdbcClient;
 
 	public Database(Vertx vertx) {
@@ -29,5 +34,17 @@ public class Database {
 
 	public JDBCClient getConnection(Handler<AsyncResult<SQLConnection>> handler) {
 		return jdbcClient.getConnection(handler);
+	}
+
+	public void query(String sql, Handler<AsyncResult<ResultSet>> handler) {
+		jdbcClient.getConnection(resSQLConnection -> {
+			if (resSQLConnection.succeeded()) {
+				SQLConnection connection = resSQLConnection.result();
+				connection.query(sql, handler);
+				connection.close();
+			}	else {
+				throw new RuntimeException("Failed to connect Database.", resSQLConnection.cause());
+			}
+		});
 	}
 }

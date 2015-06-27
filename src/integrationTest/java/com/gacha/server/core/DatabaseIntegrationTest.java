@@ -34,8 +34,11 @@ public class DatabaseIntegrationTest extends AbstractIntegrationTest {
 						ResultSet rs = res.result();
 						List<JsonArray> arr = rs.getResults();
 						context.assertNotNull(arr);
-						async.complete();
+					} else {
+						context.fail();
 					}
+					connection.close();
+					async.complete();
 				});
 			}
 		});
